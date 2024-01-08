@@ -6,8 +6,10 @@ COPY . .
 
 RUN python3.10 -m pip install -r requirements.txt
 
-CMD ["python", "main.py"]
+RUN apt-get update && apt-get install -y nginx
+
+COPY nginx.conf /etc/nginx/nginx.conf
+
+CMD ["sh", "-c", "nginx && python main.py"]
 
 EXPOSE 80
-EXPOSE 8080
-EXPOSE 3000
