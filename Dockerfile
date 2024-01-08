@@ -1,9 +1,11 @@
 FROM python:bullseye
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-COPY requirements.txt requirements.txt
+COPY . .
 
-RUN pip install -r requirements.txt
+RUN python3.10 -m pip install -r requirements.txt
 
 CMD ["python", "main.py"]
+
+EXPOSE 80
