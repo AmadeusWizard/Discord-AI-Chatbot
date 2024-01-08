@@ -1,5 +1,5 @@
 DockerfileCopy code# Base image
-FROM python:3.9-slim
+FROM FROM python:3.8
 
 # Working directory
 WORKDIR /app
