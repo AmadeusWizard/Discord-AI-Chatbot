@@ -1,8 +1,18 @@
-FROM python:3.8
-FROM nginx:stable-alpine
+DockerfileCopy code# Base image
+FROM python:3.9-slim
+
+# Working directory
 WORKDIR /app
-COPY . /usr/share/nginx/html
-RUN pip install -r requirements.txt
-CMD ["python", "main.py"]
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+
+# Copy requirements file and install dependencies
+COPY requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the project files
+COPY . .
+
+# Expose the server port
+EXPOSE 8080
+
+# Command to start the server
+CMD ["gunicorn", "-b", "0.0.0.0:8080", "app:app"]
