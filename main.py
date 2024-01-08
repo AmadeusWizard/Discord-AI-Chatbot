@@ -61,7 +61,7 @@ def fetch_chat_models():
         'Content-Type': 'application/json'
     }
 
-    response = requests.get('https://api.naga.ac/v1/models', headers=headers)
+    response = requests.get('https://api.mandrillai.tech/v1/models', headers=headers)
     if response.status_code == 200:
         ModelsData = response.json()
         models.extend(
