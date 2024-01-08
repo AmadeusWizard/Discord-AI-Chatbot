@@ -8,7 +8,7 @@ RUN python3.10 -m pip install -r requirements.txt
 
 RUN apt-get update && apt-get install -y nginx
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/
 
 CMD ["sh", "-c", "nginx && python main.py"]
 
