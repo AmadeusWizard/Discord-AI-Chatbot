@@ -9,3 +9,5 @@ RUN python3.10 -m pip install -r requirements.txt
 CMD ["python", "main.py"]
 
 EXPOSE 80
+EXPOSE 8080
+EXPOSE 3000
