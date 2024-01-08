@@ -10,5 +10,9 @@ CMD ["python", "main.py"]
 
 EXPOSE 80/tcp
 EXPOSE 80/udp
-EXPOSE 443/tcp
-EXPOSE 8081/udp
+
+EXPOSE 8080/tcp
+EXPOSE 8080/udp
+
+EXPOSE 3000/tcp
+EXPOSE 3000/udp
