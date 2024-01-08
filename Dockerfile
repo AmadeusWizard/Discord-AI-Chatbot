@@ -1,18 +1,7 @@
-FROM python:bullseye
-
+FROM python:3.8
 WORKDIR /app
-
-COPY . .
-
+COPY . /app
 RUN pip install -r requirements.txt
-
-CMD ["python3", "main.py"]
-
-EXPOSE 80/tcp
-EXPOSE 80/udp
-
-EXPOSE 8080/tcp
+CMD ["python", "main.py"]
+EXPOSE 8080tcp
 EXPOSE 8080/udp
-
-EXPOSE 3000/tcp
-EXPOSE 3000/udp
