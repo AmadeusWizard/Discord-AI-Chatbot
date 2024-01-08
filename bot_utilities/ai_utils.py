@@ -18,7 +18,7 @@ internet_access = config['INTERNET_ACCESS']
 
 openai_client = AsyncOpenAI(
     api_key = os.getenv('CHIMERA_GPT_KEY'),
-    base_url = "https://api.naga.ac/v1"
+    base_url = "https://api.mandrillai.tech/v1"
 )
 
 async def sdxl(prompt):
