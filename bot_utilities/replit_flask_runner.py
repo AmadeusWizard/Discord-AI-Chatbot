@@ -18,7 +18,7 @@ cli = sys.modules['flask.cli']
 cli.show_server_banner = lambda *x: None
 
 def run_flask_app():
-    app.run(host='0.0.0.0', port=3000, debug=False, use_reloader=False)
+    app.run(host='0.0.0.0', port=8080, debug=False, use_reloader=False)
 
 Welcomer = """\033[1;31m⚠️ Looks like you are running this project on Replit\033[0m
 \033[1;33mPlease note that the .env file cannot exist on Replit.
