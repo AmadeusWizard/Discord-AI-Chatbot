@@ -8,4 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 CMD ["python", "main.py"]
 
-EXPOSE 3000
+EXPOSE 80/tcp
+EXPOSE 80/udp
+EXPOSE 443/tcp
+EXPOSE 8081/udp
