@@ -1,6 +1,8 @@
+FROM python:3.8
 FROM nginx:stable-alpine
-FROM python:bullseye
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . /usr/share/nginx/html
+WORKDIR /app
+COPY . /app
+RUN pip install -r requirements.txt
+CMD ["python", "main.py"]
 EXPOSE 80
-CMD ["python", "main.py", "nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
