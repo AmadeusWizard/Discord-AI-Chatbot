@@ -10,18 +10,13 @@ import aiohttp
 import discord
 import random
 import string
-
-from flask import Flask
-from discord.ext import commands
-from disuniter import keepAlive
-# normal bot code here...
-
-# from replit_keep_alive import keep_alive
-from threading import Thread
-
 from discord import Embed, app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
+
+# Text to Speech
+from gtts import gTTS
+import pyttsx3
 
 from bot_utilities.ai_utils import generate_response, generate_image_prodia, search, poly_image_gen, generate_gpt4_response, dall_e_gen, sdxl
 from bot_utilities.response_util import split_response, translate_to_en, get_random_prompt
@@ -70,7 +65,7 @@ def fetch_chat_models():
         'Content-Type': 'application/json'
     }
 
-    response = requests.get('https://api.mandrillai.tech/v1/models', headers=headers)
+    response = requests.get('https://api.naga.ac/v1/models', headers=headers)
     if response.status_code == 200:
         ModelsData = response.json()
         models.extend(
@@ -85,6 +80,11 @@ def fetch_chat_models():
 
 chat_models = fetch_chat_models()
 model_blob = "\n".join(chat_models)
+
+# Text To Speech
+def text_to_speech(text):
+    tts = gTTS(text=text, lang='en')
+    tts.save("tts_output.mp3")
 
 @bot.event
 async def on_ready():
@@ -184,6 +184,26 @@ async def on_message(message):
                 await message.remove_reaction("🔎", bot.user)
         message_history[key].append({"role": "assistant", "name": personaname, "content": response})
 
+        # Generate a TTS file
+        text_to_speech(response)
+
+        # Join VC to give reponse!
+        author_voice_channel = None
+        if message.guild:  # Check if the message is from a guild (server)
+            author_member = message.guild.get_member(message.author.id)
+            if author_member and author_member.voice:
+                author_voice_channel = author_member.voice.channel
+
+        if author_voice_channel:
+            # Rest of the code to play TTS in the voice channel
+            voice_channel = await author_voice_channel.connect()
+            voice_channel.play(discord.FFmpegPCMAudio(executable="ffmpeg", source="tts_output.mp3"))
+            while voice_channel.is_playing():
+                await asyncio.sleep(1)
+            await voice_channel.disconnect()
+
+        # TTS, response to VC ends!
+
         if response is not None:
             for chunk in split_response(response):
                 try:
@@ -215,9 +235,9 @@ async def pfp(ctx, attachment: discord.Attachment):
     
 @bot.hybrid_command(name="ping", description=current_language["ping"])
 async def ping(ctx):
-      latency = bot.latency * 1000
-      message = f"Ping: {latency:.2f} ms"
-      await ctx.send(message)
+    latency = bot.latency * 1000
+    await ctx.send(f"{current_language['ping_msg']}{latency:.2f} ms")
+
 
 @bot.hybrid_command(name="changeusr", description=current_language["changeusr"])
 @commands.is_owner()
@@ -504,6 +524,7 @@ async def server(ctx):
             embed.add_field(name=guild.name, value="*[No invite permission]*", inline=True)
 
     await ctx.send(embed=embed, ephemeral=True)
+    
 
 @bot.event
 async def on_command_error(ctx, error):
@@ -517,5 +538,3 @@ if detect_replit():
     run_flask_in_thread()
 if __name__ == "__main__":
     bot.run(TOKEN)
-
-keepAlive(bot)
